@@ -1,0 +1,6 @@
+output
+*.crt
+*.key
+key.pem
+.env*
+
