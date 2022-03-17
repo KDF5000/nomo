@@ -1,13 +1,9 @@
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/KDF5000/notion-sdk-go v0.0.0-20220301155050-7a4a68c01d97 h1:no20Pr0V3SC2yQZxleu001VLM6aS6GcBouwPDPHk+Po=
-github.com/KDF5000/notion-sdk-go v0.0.0-20220301155050-7a4a68c01d97/go.mod h1:XS6jk72TBE3lay/nckFQMQ+7aurYA+XS5TnDXMYw2Xw=
-github.com/KDF5000/notion-sdk-go v0.0.0-20220302144250-02fd1be14433 h1:jEDTQC7w99A1zr7pDmRNyGxeXrZaTANIsxwpytMW+WM=
-github.com/KDF5000/notion-sdk-go v0.0.0-20220302144250-02fd1be14433/go.mod h1:XS6jk72TBE3lay/nckFQMQ+7aurYA+XS5TnDXMYw2Xw=
 github.com/KDF5000/notion-sdk-go v0.0.0-20220302154627-2eb45474a453 h1:94C9jyEGGjR7ggSrIerMDXK29h3HNm/d+Rc9HgGnAoU=
 github.com/KDF5000/notion-sdk-go v0.0.0-20220302154627-2eb45474a453/go.mod h1:XS6jk72TBE3lay/nckFQMQ+7aurYA+XS5TnDXMYw2Xw=
-github.com/KDF5000/pkg v0.0.0-20220216153758-456bef73f208 h1:78+1uPBd3fW/2/dJ3HnwctpnoOU+xcyfSTRJuDrTpic=
-github.com/KDF5000/pkg v0.0.0-20220216153758-456bef73f208/go.mod h1:mioWt84WJqo5Af+BdQtmEdSmXfyPjidvO3RoWv0tNwU=
+github.com/KDF5000/pkg v0.0.0-20220317082242-6b6f2dd6016f h1:ssIp3iKdsZ6hZ1d3v6LT6BwiDMNJXyanWI+5oLxnM/s=
+github.com/KDF5000/pkg v0.0.0-20220317082242-6b6f2dd6016f/go.mod h1:mioWt84WJqo5Af+BdQtmEdSmXfyPjidvO3RoWv0tNwU=
 github.com/benbjohnson/clock v1.1.0 h1:Q92kusRqC1XV2MjkWETPvjJVqKetz1OzxZB7mHJLju8=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
 github.com/bitly/go-simplejson v0.5.0/go.mod h1:cXHtHw4XUPsvGaxgjIAn8PhEWG9NfngEKAMDJEczWVA=
