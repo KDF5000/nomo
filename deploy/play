@@ -1,0 +1,29 @@
+#! /bin/bash
+set -xe
+# usage: play [dploy|upgrade|restart] hosts
+
+hosts=$2
+
+start=$(date +%s)
+case $1 in
+    "deploy")
+       echo "deploy $ROLE to hosts in group [$hosts]"
+       ansible-playbook -v -i hosts -e "hosts=$hosts" deploy.yaml
+       ;;
+    "undeploy")
+       echo "not implemented!"
+       ;;
+    "upgrade")
+       echo "not implemented!"
+       ;;
+    "restart")
+       echo "not implemented!"
+       ;;
+     *)
+       echo "unknow command!!"
+       ;;
+esac
+
+end=$(date +%s)
+elapsed=$(( $end - $start ))
+echo "[$(date '+%Y-%m-%d_%H:%M:%S')] $1 $hosts ${elapsed}s" > current

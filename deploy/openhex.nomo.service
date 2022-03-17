@@ -1,0 +1,12 @@
+[Unit]
+Description=zephyr is api server for wowsaa platform
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+WorkingDirectory=/opt/openhex/nomo
+ExecStart=/opt/openhex/nomo/run.sh
+Restart=always
+
+[Install]
+WantedBy=default.target

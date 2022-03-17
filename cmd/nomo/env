@@ -1,0 +1,19 @@
+# Mysql
+DB_HOST=127.0.0.1
+DB_DRIVER=mysql
+DB_USER=root
+DB_PASSWORD=xxxxxxxxxx
+DB_NAME=nomo
+DB_PORT=3306
+
+# http server
+USE_HTTPS=true
+HTTPS_CERT_FILE=/opt/openhex/nomo/conf/openhex.crt
+HTTPS_KEY_FILE=/opt/openhex/nomo/conf/openhex.key
+#HTTP_ADDR=127.0.0.1
+HTTP_PORT=443
+
+LARK_APP_ID=xxxxxxxxxx
+LARK_APP_SECRET=xxxxxxxxxx
+ADMIN_EMAIL=xxxxxxxxxx
+ADMIN_USERID=xxxxxxxxxx
