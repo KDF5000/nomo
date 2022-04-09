@@ -4,7 +4,7 @@ set -e
 ARCH=$1
 ENV=$2
 rm -rf output
-mkdir -p output/bin output/conf
+mkdir -p output/bin output/conf output/static output/static/template
 
 GIT_SHA=`git rev-parse --short HEAD || echo "NotGitVersion"`
 GIT_BRANCH=`git branch 2>/dev/null | grep "^\*" | sed -e "s/^\*\ //"`
@@ -33,3 +33,4 @@ cp deploy/run.sh output/run.sh
 cp deploy/run_wx.sh output/run_wx.sh
 cp deploy/conf/nomo.openhex.cn.crt output/conf/openhex.crt
 cp deploy/conf/nomo.openhex.cn.key output/conf/openhex.key
+cp static/template/*.tpl output/static/template

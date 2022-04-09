@@ -105,12 +105,13 @@ func main() {
 		application.NewBindInfoApp(repos.BindInfoRepo))
 	larkMsgHandler := interfaces.NewLarkMessageHandler(
 		application.NewLarkMessageHandleApp(repos.BindInfoRepo, repos.LarkBotRegistarRepo, notify))
+	posterHandler := interfaces.NewPosterHandler(application.NewPosterApp())
 
 	v1 := router.Group("/api/v1")
 	v1.POST("/bind/wx", bindHander.BindWX)
 	v1.POST("/bind/lark", bindHander.BindLark)
 	v1.POST("/message/lark", larkMsgHandler.HandleMessage)
-	// v1.POST("/message/lark", larkMsgHandler.UrlVerification)
+	v1.GET("/poster/:id", posterHandler.GenPoster)
 
 	srv := &http.Server{
 		Addr:    addr,
