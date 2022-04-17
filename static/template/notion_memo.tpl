@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+
 <style>
 .share-nomo {
     width: 360px;
     min-height: 50px;
     background-color: #F8F8F8;
     align-self: center;
-    padding: 12px;
-    font-family: Arial, Helvetica, sans-serif;
+    padding: 8px;
+    font-family: -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
 }
 
 .memo-wrapper {
     border-radius: 2px;
     border-color: #000;
     background-color: #FFFFFF;
-    padding: 20px;
+    padding: 16px;
 }
 
 .memo-footer  {
-    font-size: 10px;
+    font-size: 8px;
     color: #BAB4B4;
-    margin-top: 4px;
-    padding: 4px;
+    margin-top: 2px;
+    padding: 2px;
 }
 
 .span-logo {
@@ -54,9 +59,9 @@
 }
 
 </style>
+
 <div class="share-nomo">
   <div class="memo-wrapper">
-      <span class="memo-date">{{ .CreatedAt }}</span>
       <div class="memo-content">
       {{ range .ContentElements }}
         {{ if .IsTag }}
@@ -72,3 +77,5 @@
     <span class="span-username">via {{ .UserName }}</span>
   </div>
 </div>
+
+</html>

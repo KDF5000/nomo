@@ -2,6 +2,7 @@ package converter
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/chromedp/cdproto/emulation"
@@ -23,9 +24,17 @@ func (ins *Html2Image) Convert(ctx context.Context, url string, sel string) ([]b
 		ins.convertElapsed = time.Since(start)
 	}()
 
-	ctx, cancel := chromedp.NewContext(ctx)
-	defer cancel()
+	var options []chromedp.ExecAllocatorOption
+	options = append(options, chromedp.CombinedOutput(log.Writer()))
+	options = append(options, chromedp.DefaultExecAllocatorOptions[:]...)
 
+	options = append(options, chromedp.DisableGPU)
+	options = append(options, chromedp.Flag("ignore-certificate-errors", true))
+	actX, aCancel := chromedp.NewExecAllocator(ctx, options...)
+	defer aCancel()
+
+	ctx, cancel := chromedp.NewContext(actX)
+	defer cancel()
 	tasks := []chromedp.Action{
 		chromedp.Navigate(url),
 		chromedp.ActionFunc(func(ctx context.Context) error {
