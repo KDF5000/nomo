@@ -9,7 +9,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/KDF5000/nomo/infrastructure/converter"
+	"github.com/Jeffail/tunny"
+	"github.com/KDF5000/nomo/infrastructure/convertor"
 	itemplate "github.com/KDF5000/nomo/interfaces/template"
 	"github.com/KDF5000/pkg/log"
 )
@@ -19,12 +20,12 @@ type IPosterApp interface {
 }
 
 type posterApp struct {
-	converter *converter.Html2Image
+	pool *tunny.Pool
 }
 
-func NewPosterApp() *posterApp {
+func NewPosterApp(workerNum int) *posterApp {
 	return &posterApp{
-		converter: &converter.Html2Image{},
+		pool: tunny.NewFunc(workerNum, convertor.ConvertHandler),
 	}
 }
 
@@ -52,5 +53,18 @@ func (app *posterApp) GenPoster(ctx context.Context, id uint, data interface{}) 
 		tmpl.Execute(w, viewData)
 	}))
 
-	return app.converter.Convert(ctx, server.URL, "div.share-nomo")
+	cfg := convertor.ConvConfig{
+		Ctx:    ctx,
+		Url:    server.URL,
+		Params: convertor.DefaultHtmlImageParams,
+	}
+
+	cfg.Params.Selector = "div.share-nomo"
+	out, err := app.pool.ProcessCtx(ctx, cfg)
+	if err != nil {
+		log.Errorf("err: %v", err)
+		return nil, err
+	}
+	dto, _ := out.(convertor.ConvertOutput)
+	return dto.Buf, nil
 }

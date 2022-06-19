@@ -1,4 +1,4 @@
-package converter
+package convertor
 
 import (
 	"context"
@@ -12,9 +12,13 @@ import (
 )
 
 func TestBasic(t *testing.T) {
-	c := &Html2Image{}
+	cfg := ConvConfig{
+		Url:    "http://baidu.com",
+		Params: DefaultHtmlImageParams,
+	}
+	c := NewHtml2ImageConvertor(cfg)
 
-	buf, err := c.Convert(context.TODO(), "http://baidu.com", "")
+	buf, err := c.Convert(context.TODO())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -71,8 +75,14 @@ func TestSelector(t *testing.T) {
 		tmpl.Execute(w, data)
 	}))
 
-	c := &Html2Image{}
-	buf, err := c.Convert(context.TODO(), server.URL, "div.share-nomo")
+	cfg := ConvConfig{
+		Url:    server.URL,
+		Params: DefaultHtmlImageParams,
+	}
+	cfg.Params.Selector = "div.share-nomo"
+	c := NewHtml2ImageConvertor(cfg)
+
+	buf, err := c.Convert(context.TODO())
 	if err != nil {
 		t.Fatal(err)
 	}

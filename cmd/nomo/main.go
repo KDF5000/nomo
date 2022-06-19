@@ -105,7 +105,12 @@ func main() {
 		application.NewBindInfoApp(repos.BindInfoRepo))
 	larkMsgHandler := interfaces.NewLarkMessageHandler(
 		application.NewLarkMessageHandleApp(repos.BindInfoRepo, repos.LarkBotRegistarRepo, notify))
-	posterHandler := interfaces.NewPosterHandler(application.NewPosterApp())
+
+	maxNum := 4
+	if n, err := strconv.Atoi(os.Getenv("CONVERTOR_MAX_WORKERS")); err != nil {
+		maxNum = n
+	}
+	posterHandler := interfaces.NewPosterHandler(application.NewPosterApp(maxNum))
 
 	v1 := router.Group("/api/v1")
 	v1.POST("/bind/wx", bindHander.BindWX)

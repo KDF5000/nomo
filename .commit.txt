@@ -1,2 +1,4 @@
 go.mod
 go.sum
+infrastructure/converter/html2image.go
+static/template/notion_memo.tpl

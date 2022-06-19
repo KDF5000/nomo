@@ -53,6 +53,7 @@ func (h *posterHandler) GenPoster(c *gin.Context) {
 		return
 	}
 
+	log.Infof("%v", viewData)
 	data, err := h.posterApp.GenPoster(c.Request.Context(), uint(id), viewData)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
