@@ -63,3 +63,24 @@ func (h *posterHandler) GenPoster(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "image/png")
 	c.Writer.WriteString(string(data))
 }
+
+func (h *posterHandler) Screenshot(c *gin.Context) {
+	var request proto.ScreenshotRequst
+	if err := c.ShouldBind(&request); err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if !request.IsValidUrl() {
+		c.JSON(http.StatusBadRequest, "invalid url, must be like http://xxx.com or https://xxx.com")
+		return
+	}
+	data, err := h.posterApp.Screnshot(c.Request.Context(), &request)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.Writer.Header().Set("Content-Type", "image/png")
+	c.Writer.WriteString(string(data))
+}

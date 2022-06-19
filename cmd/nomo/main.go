@@ -117,6 +117,7 @@ func main() {
 	v1.POST("/bind/lark", bindHander.BindLark)
 	v1.POST("/message/lark", larkMsgHandler.HandleMessage)
 	v1.GET("/poster/:id", posterHandler.GenPoster)
+	v1.GET("/screenshot", posterHandler.Screenshot)
 
 	srv := &http.Server{
 		Addr:    addr,

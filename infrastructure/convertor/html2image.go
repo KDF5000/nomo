@@ -11,15 +11,16 @@ import (
 
 var (
 	DefaultViewportWidth         int64 = 390
-	DefaultViewportHeight        int64 = 884
+	DefaultViewportHeight        int64 = 0
 	DefaultScale                 int64 = 6
-	DefaultFullScreenshotQuality int64 = 90
+	DefaultFullScreenshotQuality int64 = 60
 )
 
 type Html2ImageParams struct {
 	ViewportWidth         int64
 	ViewportHeight        int64
 	Scale                 int64
+	Mobile                bool
 	FullScreenshotQuality int64
 	Selector              string
 }
@@ -27,6 +28,7 @@ type Html2ImageParams struct {
 var DefaultHtmlImageParams = Html2ImageParams{
 	ViewportWidth:         DefaultViewportWidth,
 	ViewportHeight:        DefaultViewportHeight,
+	Mobile:                false,
 	Scale:                 DefaultScale,
 	FullScreenshotQuality: DefaultFullScreenshotQuality,
 }
@@ -69,7 +71,7 @@ func (c *Html2Image) Convert(ctx context.Context) ([]byte, error) {
 			return emulation.SetDeviceMetricsOverride(c.conf.Params.ViewportWidth,
 				c.conf.Params.ViewportHeight,
 				float64(c.conf.Params.Scale),
-				true).
+				c.conf.Params.Mobile).
 				WithScreenOrientation(&emulation.ScreenOrientation{
 					Type:  emulation.OrientationTypePortraitPrimary,
 					Angle: 0,

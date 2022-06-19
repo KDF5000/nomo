@@ -11,12 +11,14 @@ import (
 
 	"github.com/Jeffail/tunny"
 	"github.com/KDF5000/nomo/infrastructure/convertor"
+	"github.com/KDF5000/nomo/interfaces/proto"
 	itemplate "github.com/KDF5000/nomo/interfaces/template"
 	"github.com/KDF5000/pkg/log"
 )
 
 type IPosterApp interface {
 	GenPoster(ctx context.Context, id uint, data interface{}) ([]byte, error)
+	Screnshot(ctx context.Context, req *proto.ScreenshotRequst) ([]byte, error)
 }
 
 type posterApp struct {
@@ -62,9 +64,41 @@ func (app *posterApp) GenPoster(ctx context.Context, id uint, data interface{}) 
 	cfg.Params.Selector = "div.share-nomo"
 	out, err := app.pool.ProcessCtx(ctx, cfg)
 	if err != nil {
-		log.Errorf("err: %v", err)
+		log.Errorf("failed to process genposter: %v", err)
 		return nil, err
 	}
+	dto, _ := out.(convertor.ConvertOutput)
+	return dto.Buf, nil
+}
+
+func (app *posterApp) Screnshot(ctx context.Context, req *proto.ScreenshotRequst) ([]byte, error) {
+	cfg := convertor.ConvConfig{
+		Ctx:    ctx,
+		Url:    req.Url,
+		Params: convertor.DefaultHtmlImageParams,
+	}
+
+	if req.Mobile > 0 {
+		cfg.Params.Mobile = true
+	}
+
+	if req.Width > 0 {
+		cfg.Params.ViewportWidth = req.Width
+	}
+
+	if req.Height > 0 {
+		cfg.Params.ViewportHeight = req.Height
+	}
+
+	if req.Quality > 0 {
+		cfg.Params.FullScreenshotQuality = req.Quality
+	}
+
+	out, err := app.pool.ProcessCtx(ctx, cfg)
+	if err != nil {
+		log.Errorf("failed to screenshot, err=%v", err)
+	}
+
 	dto, _ := out.(convertor.ConvertOutput)
 	return dto.Buf, nil
 }
