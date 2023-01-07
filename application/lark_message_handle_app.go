@@ -283,8 +283,13 @@ func (app *larkMessageHandleApp) ProcessMessage(ctx context.Context, event *lark
 
 	message := &event.Event.Message
 	if message.MessageType != "text" {
-		msg := fmt.Sprintf("only text message supported!, got: %s", event.Event.Message.MessageType)
+		msg := fmt.Sprintf("unsupported message type: %s, app_id: %s  chat_id: %s, messageid: %s",
+			event.Event.Message.MessageType, event.Header.AppID, message.ChatID, message.MessageID)
 		app.larkNotify(msg)
+		if reg, err := app.getBotRegistar(ctx, event.Header.AppID); err == nil {
+			ReplyLarkMessage(reg.AppID, reg.SecretKey, message.ChatID, message.MessageID,
+				fmt.Sprintf("目前只支持文本消息，当前类型为 %s", event.Event.Message.MessageType))
+		}
 		return fmt.Errorf("%s", msg)
 	}
 
