@@ -35,7 +35,7 @@ output
 - 微信云托管是个Docker环境需要Dockerfile，当前仓库提供了一份，需要在微信云部署的只需要fork一份仓库，然后修改`cmd/nomo/.env`为自己的微信云托管环境的配置，就可以直接部署
 - Ansible部署更加通用一些，可以在任何云主机或者物理机环境部署，`deploy`目录实现了一个ansible部署的方式，通过sysmted托管进程，确保机器重启自动启动服务
 
-不想自己维护的同学，也可以直接使用我在[腾讯云](https://cloud.tencent.com/)部署的一套服务：[https://nomo.openhex.cn/api/v1](https://nomo.openhex.cn/api/v1)。使用方式可以参考：[如何使用飞书机器人打造一个私人的Flomo?](https://openhex.cn/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E9%A3%9E%E4%B9%A6%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E7%A7%81%E4%BA%BA%E7%9A%84flomo)
+不想自己维护的同学，也可以直接使用我在[腾讯云](https://cloud.tencent.com/)部署的一套服务：[https://nomo.openhex.cn/api/v1](https://nomo.openhex.cn/api/v1)。使用方式可以参考：[如何使用飞书机器人打造一个私人的Flomo?](https://blog.openhex.cn/posts/35d22c04-5518-4871-9812-832af9e8d5fa)
 
 ## RoadMap
 - [x] 不同租户Lark机器人支持

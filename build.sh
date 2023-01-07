@@ -31,6 +31,6 @@ mv nomo output/bin/nomo
 cp ${env_path} output/bin/.env
 cp deploy/run.sh output/run.sh
 cp deploy/run_wx.sh output/run_wx.sh
-cp deploy/conf/nomo.openhex.cn.crt output/conf/openhex.crt
-cp deploy/conf/nomo.openhex.cn.key output/conf/openhex.key
+#cp deploy/conf/nomo.openhex.cn.crt output/conf/openhex.crt
+#cp deploy/conf/nomo.openhex.cn.key output/conf/openhex.key
 cp static/template/*.tpl output/static/template

@@ -14,6 +14,7 @@ import (
 
 	"github.com/KDF5000/pkg/larkbot"
 	"github.com/KDF5000/pkg/log"
+	"github.com/eatmoreapple/openwechat"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -44,6 +45,31 @@ func initLog() {
 
 	logger := log.NewTeeWithRotate(tops)
 	log.ResetDefault(logger)
+}
+
+func bootWechatbot() {
+	//bot := openwechat.DefaultBot()
+	bot := openwechat.DefaultBot(openwechat.Desktop) // 桌面模式，上面登录不上的可以尝试切换这种模式
+
+	app := application.NewWXBotHandleApp()
+	bot.MessageHandler = app.Handler
+
+	// 注册登陆二维码回调
+	bot.UUIDCallback = app.QrCodeCallBack
+
+	// 创建热存储容器对象
+	reloadStorage := openwechat.NewJsonFileHotReloadStorage("storage.json")
+
+	// 执行热登录
+	err := bot.HotLogin(reloadStorage)
+	if err != nil {
+		if err = bot.Login(); err != nil {
+			log.Infof("login error: %v \n", err)
+			return
+		}
+	}
+	// 阻塞主goroutine, 直到发生异常或者用户主动退出
+	bot.Block()
 }
 
 func main() {
@@ -101,8 +127,6 @@ func main() {
 		}
 	}
 
-	bindHander := interfaces.NewBindHandler(
-		application.NewBindInfoApp(repos.BindInfoRepo))
 	larkMsgHandler := interfaces.NewLarkMessageHandler(
 		application.NewLarkMessageHandleApp(repos.BindInfoRepo, repos.LarkBotRegistarRepo, notify))
 
@@ -113,11 +137,17 @@ func main() {
 	posterHandler := interfaces.NewPosterHandler(application.NewPosterApp(maxNum))
 
 	v1 := router.Group("/api/v1")
-	v1.POST("/bind/wx", bindHander.BindWX)
-	v1.POST("/bind/lark", bindHander.BindLark)
 	v1.POST("/message/lark", larkMsgHandler.HandleMessage)
 	v1.GET("/poster/:id", posterHandler.GenPoster)
 	v1.GET("/screenshot", posterHandler.Screenshot)
+
+	wxMsgHandler := interfaces.NewWXMessageHandler(application.NewwxMessageHandleApp(os.Getenv("WX_TOKEN")))
+	// wechat handler
+	v1.GET("/wx", wxMsgHandler.UrlVerification)
+	v1.POST("/wx", wxMsgHandler.HandleMessage)
+
+	// start wechatbot in background
+	go bootWechatbot()
 
 	srv := &http.Server{
 		Addr:    addr,
