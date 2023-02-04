@@ -16,10 +16,10 @@ import (
 )
 
 type wxMessageHandler struct {
-	messageHandleApp application.MessageHandleApp
+	messageHandleApp *application.MessageHandleApp
 }
 
-func NewWXMessageHandler(app application.MessageHandleApp) *wxMessageHandler {
+func NewWXMessageHandler(app *application.MessageHandleApp) *wxMessageHandler {
 	return &wxMessageHandler{messageHandleApp: app}
 }
 

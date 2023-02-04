@@ -18,6 +18,15 @@ import (
 	. "github.com/KDF5000/nomo/infrastructure/utils"
 )
 
+var (
+	helpInfo = `
+	Usage:
+	  /register app_id secret_key                 register a lark bot
+	  /bind notion secret_key page_id [theme]     bind notion page
+	  /bind doc app_id secret_key page_id [theme] bind lark doc page
+`
+)
+
 type ILarkMessageHandleApp interface {
 	ProcessMessage(ctx context.Context, event *lark_message.LarkMessageEvent) error
 	VerifyURL(ctx context.Context, event *lark_message.UrlVerificationEvent) (*lark_message.UrlVerificationResult, error)

@@ -27,7 +27,7 @@ import (
 func initLog() {
 	var logFile string
 	if logFile = os.Getenv("NOMO_LOG_FILE"); logFile == "" {
-		logFile = "/var/log/nomo.log"
+		logFile = "/tmp/nomo.log"
 	}
 
 	var tops = []log.TeeOption{
@@ -47,11 +47,12 @@ func initLog() {
 	log.ResetDefault(logger)
 }
 
-func bootWechatbot() {
+func bootWechatbot(repos *persistence.Repositories) {
+	log.Info("start wechat bot in background...")
 	//bot := openwechat.DefaultBot()
 	bot := openwechat.DefaultBot(openwechat.Desktop) // 桌面模式，上面登录不上的可以尝试切换这种模式
 
-	app := application.NewWXBotHandleApp()
+	app := application.NewWXBotHandleApp(repos.BindInfoRepo, repos.LarkBotRegistarRepo)
 	bot.MessageHandler = app.Handler
 
 	// 注册登陆二维码回调
@@ -63,11 +64,13 @@ func bootWechatbot() {
 	// 执行热登录
 	err := bot.HotLogin(reloadStorage)
 	if err != nil {
+		log.Errorf("faield to hot login: %v", err)
 		if err = bot.Login(); err != nil {
 			log.Infof("login error: %v \n", err)
 			return
 		}
 	}
+
 	// 阻塞主goroutine, 直到发生异常或者用户主动退出
 	bot.Block()
 }
@@ -141,13 +144,13 @@ func main() {
 	v1.GET("/poster/:id", posterHandler.GenPoster)
 	v1.GET("/screenshot", posterHandler.Screenshot)
 
-	wxMsgHandler := interfaces.NewWXMessageHandler(application.NewwxMessageHandleApp(os.Getenv("WX_TOKEN")))
+	wxMsgHandler := interfaces.NewWXMessageHandler(application.NewWXMessageHandleApp(os.Getenv("WX_TOKEN")))
 	// wechat handler
 	v1.GET("/wx", wxMsgHandler.UrlVerification)
 	v1.POST("/wx", wxMsgHandler.HandleMessage)
 
 	// start wechatbot in background
-	go bootWechatbot()
+	go bootWechatbot(repos)
 
 	srv := &http.Server{
 		Addr:    addr,

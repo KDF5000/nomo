@@ -16,9 +16,7 @@ import (
 	"github.com/KDF5000/nomo/infrastructure/notion"
 )
 
-type wxMessageHandleApp struct {
-	MesssageHandle
-
+type MessageHandleApp struct {
 	token string
 
 	notionCli      *notion.NotionClient
@@ -30,8 +28,8 @@ type wxMessageHandleApp struct {
 	eventCache *cache.Cache
 }
 
-func NewwxMessageHandleApp(token string) *wxMessageHandleApp {
-	app := &wxMessageHandleApp{
+func NewWXMessageHandleApp(token string) *MessageHandleApp {
+	app := &MessageHandleApp{
 		notionCli:      &notion.NotionClient{},
 		larkDocWrapper: &lark_doc.LarkDocWrapper{},
 		handlers:       make(map[entity.BindPlatformType]appendHandler),
@@ -45,11 +43,11 @@ func NewwxMessageHandleApp(token string) *wxMessageHandleApp {
 	return app
 }
 
-func (app *wxMessageHandleApp) ProcessMessage(ctx context.Context, message interface{}) error {
+func (app *MessageHandleApp) ProcessMessage(ctx context.Context, message interface{}) error {
 	return nil
 }
 
-func (app *wxMessageHandleApp) VerifyURL(ctx context.Context, message interface{}) (interface{}, error) {
+func (app *MessageHandleApp) VerifyURL(ctx context.Context, message interface{}) (interface{}, error) {
 	msg, ok := message.(wx_message.WechatVerifyParam)
 	if !ok {
 		return nil, fmt.Errorf("invalid message type")
