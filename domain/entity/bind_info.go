@@ -61,6 +61,8 @@ type NotionPageInfo struct {
 }
 
 type LarkDocPageInfo struct {
-	DocTheme string `json:"doc_theme"`
-	DocToken string `json:"doc_token"`
+	DocTheme  string `json:"doc_theme"`
+	DocToken  string `json:"doc_token"`
+	AppID     string `json:"app_id"`
+	SecretKey string `json:"secret_key"`
 }

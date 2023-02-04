@@ -19,18 +19,11 @@ import (
 )
 
 var (
-	EnabledThemes = []string{
-		"flat", // default
-		"gallery",
-	}
-
-	DefaultTheme = "flat"
-
 	helpInfo = `
-Usage:
-  /register app_id secret_key               register a lark bot
-  /bind notion secret_key page_id [theme]   bind notion page
-  /bind doc page_id [theme]                 bind lark doc page
+	Usage:
+	  /register app_id secret_key                 register a lark bot
+	  /bind notion secret_key page_id [theme]     bind notion page
+	  /bind doc app_id secret_key page_id [theme] bind lark doc page
 `
 )
 
