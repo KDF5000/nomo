@@ -16,10 +16,10 @@ import (
 )
 
 type wxMessageHandler struct {
-	messageHandleApp *application.MessageHandleApp
+	messageHandleApp *application.WXMessageHandleApp
 }
 
-func NewWXMessageHandler(app *application.MessageHandleApp) *wxMessageHandler {
+func NewWXMessageHandler(app *application.WXMessageHandleApp) *wxMessageHandler {
 	return &wxMessageHandler{messageHandleApp: app}
 }
 
@@ -41,6 +41,7 @@ func (h *wxMessageHandler) UrlVerification(c *gin.Context) {
 
 func (h *wxMessageHandler) HandleMessage(c *gin.Context) {
 	if c.Request == nil || c.Request.Body == nil {
+		log.Errorf("invalid body")
 		c.String(http.StatusBadRequest, "invalid body")
 		return
 	}
@@ -51,27 +52,29 @@ func (h *wxMessageHandler) HandleMessage(c *gin.Context) {
 		return
 	}
 
-	log.Infof("data ==> %+v", string(data))
 	var message wx_message.WxMessage
 	if err := xml.Unmarshal(data, &message); err != nil {
 		log.Warn(fmt.Sprintf("failed to unmarshal message, %v", err))
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
+	log.Infof("receive wx message, %+v", message)
 
-	if message.MsgType != "text" {
-		log.Warnf("message type %s not supported", message.MsgType)
-		c.String(http.StatusBadRequest, "message type not supported")
-		return
+	reply, err := h.messageHandleApp.ProcessMessage(c.Request.Context(), &message)
+	if err != nil {
+		reply = "系统发生错误，请稍后重试~"
 	}
 
-	reply := wx_message.WxMessageReply{
+	r := wx_message.WxMessageReply{
 		ToUserName:   message.FromUserName,
 		FromUserName: message.ToUserName,
 		CreateTime:   uint64(time.Now().Unix()),
 		MsgType:      "text",
-		Content:      message.Content,
+		Content:      reply,
 	}
 
-	c.XML(http.StatusOK, &reply)
+	log.Infof("reply message, %+v", r)
+	data, _ = xml.Marshal(&r)
+	c.String(http.StatusOK, string(data))
+	// c.XML(http.StatusOK, &r)
 }

@@ -1,12 +1,16 @@
 package wx_message
 
+import "encoding/xml"
+
 // <xml>
-//   <ToUserName><![CDATA[toUser]]></ToUserName>
-//   <FromUserName><![CDATA[fromUser]]></FromUserName>
-//   <CreateTime>1348831860</CreateTime>
-//   <MsgType><![CDATA[text]]></MsgType>
-//   <Content><![CDATA[this is a test]]></Content>
-//   <MsgId>1234567890123456</MsgId>
+//
+//	<ToUserName><![CDATA[toUser]]></ToUserName>
+//	<FromUserName><![CDATA[fromUser]]></FromUserName>
+//	<CreateTime>1348831860</CreateTime>
+//	<MsgType><![CDATA[text]]></MsgType>
+//	<Content><![CDATA[this is a test]]></Content>
+//	<MsgId>1234567890123456</MsgId>
+//
 // </xml>
 type WxMessage struct {
 	ToUserName   string `json:"ToUserName" xml:"ToUserName"`
@@ -31,11 +35,12 @@ type WxMessage struct {
 }
 
 type WxMessageReply struct {
-	ToUserName   string `json:"ToUserName" xml:"ToUserName"`
-	FromUserName string `json:"FromUserName" xml:"FromUserName"`
-	CreateTime   uint64 `json:"CreateTime" xml:"CreateTime"`
-	MsgType      string `json:"MsgType" xml:"MsgType" comment:"image,text,voice,video,shortvideo,location"`
-	Content      string `json:"Content" xml:"Content"`
+	XMLName      xml.Name `json:"-" xml:"xml"`
+	ToUserName   string   `json:"ToUserName" xml:"ToUserName"`
+	FromUserName string   `json:"FromUserName" xml:"FromUserName"`
+	CreateTime   uint64   `json:"CreateTime" xml:"CreateTime"`
+	MsgType      string   `json:"MsgType" xml:"MsgType" comment:"image,text,voice,video,shortvideo,location"`
+	Content      string   `json:"Content" xml:"Content"`
 }
 
 type WechatVerifyParam struct {

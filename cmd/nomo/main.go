@@ -144,7 +144,8 @@ func main() {
 	v1.GET("/poster/:id", posterHandler.GenPoster)
 	v1.GET("/screenshot", posterHandler.Screenshot)
 
-	wxMsgHandler := interfaces.NewWXMessageHandler(application.NewWXMessageHandleApp(os.Getenv("WX_TOKEN")))
+	wxMsgHandler := interfaces.NewWXMessageHandler(
+		application.NewWXMessageHandleApp(os.Getenv("WX_TOKEN"), repos.BindInfoRepo, repos.LarkBotRegistarRepo))
 	// wechat handler
 	v1.GET("/wx", wxMsgHandler.UrlVerification)
 	v1.POST("/wx", wxMsgHandler.HandleMessage)

@@ -35,6 +35,8 @@ Hi, welcome to use Nomo assistant~
 	MessageNotionSaveSucc     = "已保存，可以前往Notion页面查看~"
 	MessageBindSucc           = "绑定成功~"
 	MessageNotBind            = "请先绑定Notion页面!"
+
+	MessageWechatWelcome = "欢迎关注43号广场，可以绑定Notion或Lark Doc使用Nomo功能~"
 )
 
 type wxBotHandleApp struct {
