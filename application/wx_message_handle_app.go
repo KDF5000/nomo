@@ -38,6 +38,14 @@ func NewWXMessageHandleApp(token string, bind repository.BindInfoRepository, reg
 }
 
 func (app *WXMessageHandleApp) ProcessMessage(ctx context.Context, message *wx_message.WxMessage) (string, error) {
+	if message.MsgType == "event" {
+		if message.Event == "subscribe" {
+			return MessageWechatWelcome, nil
+		}
+
+		return ErrGroupMessageNotSupport, nil
+	}
+
 	if message.MsgType != "text" {
 		log.Warnf("message type %s not supported", message.MsgType)
 		return ErrMessageTypeNotSupport, nil

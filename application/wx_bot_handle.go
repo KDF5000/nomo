@@ -36,7 +36,11 @@ Hi, welcome to use Nomo assistant~
 	MessageBindSucc           = "绑定成功~"
 	MessageNotBind            = "请先绑定Notion页面!"
 
-	MessageWechatWelcome = "欢迎关注43号广场，可以绑定Notion或Lark Doc使用Nomo功能~"
+	MessageWechatWelcome = `
+谢谢关注43号广场~
+---
+这里会定期分享分布式、存储、数据库相关的技术以及论文解读。同时因为本人也是一个效率工具爱好者，所以也会根据个人需求开发一些效率工具在此分享，比如：本公众号也实现了一个类Flomo的功能，可以在聊天框以对话形式保存个人日常记录到Notion，详细使用方式见https://blog.openhex.cn/posts/35d22c04-5518-4871-9812-832af9e8d5fa
+`
 )
 
 type wxBotHandleApp struct {

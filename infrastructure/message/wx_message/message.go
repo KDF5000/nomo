@@ -17,6 +17,7 @@ type WxMessage struct {
 	FromUserName string `json:"FromUserName" xml:"FromUserName"`
 	CreateTime   uint64 `json:"CreateTime" xml:"CreateTime"`
 	MsgType      string `json:"MsgType" xml:"MsgType" comment:"image,text,voice,video,shortvideo,location"`
+	Event        string `json:"Event" xml:"Event"`
 	PicUrl       string `json:"PicUrl" xml:"PicUrl"`
 	MediaId      string `json:"MediaId" xml:"MediaId"`
 	ThumbMediaId string `json:"ThumbMediaId" xml:"ThumbMediaId"`
