@@ -1,6 +1,8 @@
-## Nomo
+<h1 align="center">Welcome to Nomo 👋</h1>
+<p>
+</p>
 
-取自**No**t only Me**mo**。通过Lark、微信将思考碎片记录到Notion或者飞书文档
+> Nomo(Not only Memo)，通过Lark、微信将思考碎片记录到Notion或者飞书文档
 
 ## 编译部署
 ### 编译
@@ -13,7 +15,8 @@
 ***env：** 用来选择打包到output目录选择的`.env`文件，`cmd/nomo`目录下存在几个`.env`文件，根据指定的名字打包对应的文件到ouput目录
 
 ### 运行
-编译后会生成一个`output`目录，运行只需要一个二进制文件和`.env文`件，全部都在`bin`目录下，修改`.env`文件设置MySQL和相关的环境，然后直接运行二进制即可
+编译后会生成一个`output`目录，运行只需要一个二进制文件和`.env``文件，全部都在`bin`目录下，修改`.env`文件设置MySQL和相关的环境
+`conf`目录下的`crt`和`key`证书为SSL证书，如果需要以`https`模式启动请将自己域名对应的证书放到该目录并且修改`.env`
 ```
 output
 ├── bin

@@ -151,7 +151,7 @@ func main() {
 	v1.POST("/wx", wxMsgHandler.HandleMessage)
 
 	// start wechatbot in background
-	go bootWechatbot(repos)
+	// go bootWechatbot(repos)
 
 	srv := &http.Server{
 		Addr:    addr,

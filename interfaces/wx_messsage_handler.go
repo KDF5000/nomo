@@ -58,7 +58,7 @@ func (h *wxMessageHandler) HandleMessage(c *gin.Context) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	log.Infof("receive wx message, %+v", message)
+	// log.Infof("receive wx message, %+v", message)
 
 	reply, err := h.messageHandleApp.ProcessMessage(c.Request.Context(), &message)
 	if err != nil {
@@ -73,7 +73,7 @@ func (h *wxMessageHandler) HandleMessage(c *gin.Context) {
 		Content:      reply,
 	}
 
-	log.Infof("reply message, %+v", r)
+	// log.Infof("reply message, %+v", r)
 	data, _ = xml.Marshal(&r)
 	c.String(http.StatusOK, string(data))
 	// c.XML(http.StatusOK, &r)

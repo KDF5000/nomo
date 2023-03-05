@@ -87,3 +87,15 @@ func (msg *Message) GetMessageRawContent() (string, error) {
 
 	return content, nil
 }
+
+func (e *Event) JsonString() (string, error) {
+	if e == nil {
+		return "", fmt.Errorf("event is nil")
+	}
+
+	data, err := json.Marshal(e)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
