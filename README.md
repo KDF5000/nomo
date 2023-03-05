@@ -89,7 +89,7 @@ For those who do not want to maintain it themselves, you can also use a service 
 ## RoadMap
 - [x] Support for different tenants' Lark robots
 - [x] Support for multiple Notion page themes, such as flat types and database types
-- [x]Support for WeChat Cloud deployment
-- [x]Support for Tencent Cloud deployment
-- [x]Support for Feishu Doc storage Memo
-- [x]Support for WeChat Subscription Number sending Memo
+- [x] Support for WeChat Cloud deployment
+- [x] Support for Tencent Cloud deployment
+- [x] Support for Feishu Doc storage Memo
+- [x] Support for WeChat Subscription Number sending Memo
