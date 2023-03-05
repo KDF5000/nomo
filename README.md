@@ -47,3 +47,49 @@ output
 - [x] 支持腾讯云部署
 - [x] 支持飞书Doc存储Memo
 - [x] 支持微信订阅号发送Memo
+
+---
+## Build and Deploy
+### Build
+Modify cmd/nomo/.env to set the correct MySQL address, and then run build.sh.
+```
+./build.sh [platform] [env]
+```
+**platform: **Go supports cross-platform compilation. The default platform is the current platform. If you need to compile for Linux, specify linux.
+**env: **Used to select the corresponding .env file to be packaged into the output directory. There are several .env files under the cmd/nomo directory. Package the corresponding file to the output directory according to the specified name.
+
+### Run
+After compilation, a output directory will be generated. To run, you only need an executable file and an .env file, all of which are in the bin directory. Modify the .env file to set up MySQL and related environments. 
+The certificates in the crt and key directories under the conf directory are SSL certificates. If you need to start in https mode, put the certificate corresponding to your domain name in the directory and modify the .env file.
+
+```
+output
+├── bin
+│   ├── .env  # Configuration file, MySQL and other configurations
+│   └── nomo  # Executable program
+├── conf   
+│   ├── openhex.crt # TLS certificate, used for https
+│   └── openhex.key # TLS private key, used for https
+├── run.sh    # Start script
+└── run_wx.sh # WeChat Cloud start script
+```
+Go to the bin directory and run it directly.
+```
+./nomo
+```
+### Deployment
+In theory, deployment depends on the environment. The current repository provides two ways: WeChat Cloud and Ansible deployment.
+
+- [WeChat Cloud](https://cloud.weixin.qq.com/cloudrun):  WeChat Cloud hosting is a Docker environment that requires a Dockerfile. The current repository provides one. If you need to deploy to WeChat Cloud, simply fork a repository, then modify cmd/nomo/.env to your own WeChat Cloud hosting environment configuration, and you can deploy directly.
+
+- [Ansible](https://www.ansible.com/): Ansible deployment is more universal and can be deployed in any cloud host or physical environment. The deploy directory implements an Ansible deployment method, hosting the process through systemd to ensure that the machine automatically starts the service after a restart.
+
+For those who do not want to maintain it themselves, you can also use a service I deployed on Tencent Cloud: https://nomo.openhex.cn/api/v1. For usage, please refer to: [How to use a Feishu robot to create a private Flomo?](https://blog.openhex.cn/posts/35d22c04-5518-4871-9812-832af9e8d5fa)
+
+## RoadMap
+- [x] Support for different tenants' Lark robots
+- [x] Support for multiple Notion page themes, such as flat types and database types
+- [x]Support for WeChat Cloud deployment
+- [x]Support for Tencent Cloud deployment
+- [x]Support for Feishu Doc storage Memo
+- [x]Support for WeChat Subscription Number sending Memo
