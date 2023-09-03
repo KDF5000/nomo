@@ -13,10 +13,10 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/joho/godotenv v1.4.0
-	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/larksuite/oapi-sdk-go v1.1.48 // indirect
 	github.com/larksuite/oapi-sdk-go/v3 v3.0.29 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
+	github.com/penglongli/gin-metrics v0.1.10 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	go.uber.org/atomic v1.9.0 // indirect
