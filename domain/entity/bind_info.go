@@ -7,10 +7,16 @@ import (
 )
 
 type UserPlatformType uint8
+type LarkDocPageVersion uint8
 
 const (
 	UserPlatformTypeLark UserPlatformType = iota + 1
 	UserPlatformTypeWx
+)
+
+const (
+	LarkDocPageV1 LarkDocPageVersion = iota + 1
+	LarkDocPageV2
 )
 
 type BindPlatformType uint8
@@ -61,8 +67,10 @@ type NotionPageInfo struct {
 }
 
 type LarkDocPageInfo struct {
-	DocTheme  string `json:"doc_theme"`
-	DocToken  string `json:"doc_token"`
-	AppID     string `json:"app_id"`
-	SecretKey string `json:"secret_key"`
+	/* Old struct do not have this member */
+	Version   LarkDocPageVersion `json:"version"`
+	DocTheme  string             `json:"doc_theme"`
+	DocToken  string             `json:"doc_token"`
+	AppID     string             `json:"app_id"`
+	SecretKey string             `json:"secret_key"`
 }

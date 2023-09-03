@@ -41,7 +41,7 @@ Hi, welcome to use Nomo assistant~
 ---
 这里会定期分享分布式、存储、数据库相关的技术以及论文解读
 
-同时该公众号也实现类似Flomo的功能，可以在聊天框以对话形式保存个人日常思维碎片到Notion，使用方式见https://blog.openhex.cn/posts/35d22c04-5518-4871-9812-832af9e8d5fa
+该公众号也实现类似Flomo的功能，可以在聊天框以对话形式保存个人日常思维碎片到Notion，使用方式见https://dub.sh/wx-nomo
 `
 )
 

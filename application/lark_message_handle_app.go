@@ -21,9 +21,9 @@ import (
 var (
 	helpInfo = `
 	Usage:
-	  /register app_id secret_key                 register a lark bot
-	  /bind notion secret_key page_id [theme]     bind notion page
-	  /bind doc app_id secret_key page_id [theme] bind lark doc page
+	  /register app_id secret_key              Register a lark bot
+	  /bind notion secret_key page_id [theme]  Bind notion page
+	  /bind doc page_id [theme] [version]      Bind lark doc page
 `
 )
 
@@ -35,11 +35,12 @@ type ILarkMessageHandleApp interface {
 type appendHandler func(ctx context.Context, reg *entity.LarkBotRegistar, pageInfo string, content string) error
 
 type larkMessageHandleApp struct {
-	bindRepo        repository.BindInfoRepository
-	botRegistarRepo repository.LarkBotRegistarRepository
-	larkNotify      LarkNotify
-	notionCli       *notion.NotionClient
-	larkDocWrapper  *lark_doc.LarkDocWrapper
+	bindRepo         repository.BindInfoRepository
+	botRegistarRepo  repository.LarkBotRegistarRepository
+	larkNotify       LarkNotify
+	notionCli        *notion.NotionClient
+	larkDocWrapper   *lark_doc.LarkDocWrapper
+	larkDocV2Wrapper *lark_doc.LarkDocV2Wrapper
 
 	// use different handle for diff theme
 	handlers map[entity.BindPlatformType]appendHandler
@@ -53,13 +54,14 @@ func NewLarkMessageHandleApp(repo repository.BindInfoRepository,
 	registarRepo repository.LarkBotRegistarRepository,
 	notifier LarkNotify) *larkMessageHandleApp {
 	app := &larkMessageHandleApp{
-		bindRepo:        repo,
-		botRegistarRepo: registarRepo,
-		larkNotify:      notifier,
-		notionCli:       &notion.NotionClient{},
-		larkDocWrapper:  &lark_doc.LarkDocWrapper{},
-		handlers:        make(map[entity.BindPlatformType]appendHandler),
-		eventCache:      cache.New(3*time.Minute, 10*time.Minute),
+		bindRepo:         repo,
+		botRegistarRepo:  registarRepo,
+		larkNotify:       notifier,
+		notionCli:        &notion.NotionClient{},
+		larkDocWrapper:   &lark_doc.LarkDocWrapper{},
+		larkDocV2Wrapper: &lark_doc.LarkDocV2Wrapper{},
+		handlers:         make(map[entity.BindPlatformType]appendHandler),
+		eventCache:       cache.New(3*time.Minute, 10*time.Minute),
 	}
 
 	// register handler for diffrent theme
@@ -112,6 +114,13 @@ func (app *larkMessageHandleApp) isValidTheme(theme string) bool {
 	return false
 }
 
+func (app *larkMessageHandleApp) isValidLarkPageVersion(version string) bool {
+	if version != "v1" && version != "v2" {
+		return false
+	}
+	return true
+}
+
 // /bind doc page_id [theme]
 func (app *larkMessageHandleApp) bindLakrDocPage(ctx context.Context, userID *lark_message.UserID, content string) (err error) {
 	data := strings.Fields(strings.TrimSpace(content))
@@ -126,6 +135,16 @@ func (app *larkMessageHandleApp) bindLakrDocPage(ctx context.Context, userID *la
 		}
 
 		theme = data[3]
+	}
+
+	version := entity.LarkDocPageV2
+	if len(data) > 4 {
+		if !app.isValidLarkPageVersion(data[4]) {
+			return fmt.Errorf("invlid lark page version, must be v1 or")
+		}
+		if data[4] == "v1" {
+			version = entity.LarkDocPageV1
+		}
 	}
 
 	// user info
@@ -148,6 +167,7 @@ func (app *larkMessageHandleApp) bindLakrDocPage(ctx context.Context, userID *la
 	pageInfo := entity.LarkDocPageInfo{
 		DocTheme: theme,
 		DocToken: data[2],
+		Version:  version,
 	}
 	if info, err = json.Marshal(&pageInfo); err != nil {
 		return err
@@ -208,12 +228,14 @@ func (app *larkMessageHandleApp) handleLarkAppend(ctx context.Context, reg *enti
 		return err
 	}
 
-	// log.Infof("token: %s, theme: %s, content: %s", docInfo.DocToken, docInfo.DocTheme, content)
-
 	var err error
 	switch docInfo.DocTheme {
 	case "flat":
-		err = app.larkDocWrapper.InsertBlock(reg.AppID, reg.SecretKey, docInfo.DocToken, content)
+		if docInfo.Version == 0 || docInfo.Version == entity.LarkDocPageV1 {
+			err = app.larkDocWrapper.InsertBlock(reg.AppID, reg.SecretKey, docInfo.DocToken, content)
+		} else {
+			err = app.larkDocV2Wrapper.InsertBlock(ctx, reg.AppID, reg.SecretKey, docInfo.DocToken, content)
+		}
 	default:
 		err = fmt.Errorf("invalid theme %s", docInfo.DocTheme)
 	}
@@ -354,7 +376,7 @@ func (app *larkMessageHandleApp) ProcessMessage(ctx context.Context, event *lark
 		return err
 	}
 
-	ReplyLarkMessage(reg.AppID, reg.SecretKey, message.ChatID, message.MessageID, "已保存，可以前往Notion页面查看~")
+	ReplyLarkMessage(reg.AppID, reg.SecretKey, message.ChatID, message.MessageID, "已保存，可以前往Notion或者Doc页面查看~")
 	return nil
 }
 

@@ -5,7 +5,7 @@ go 1.15
 require (
 	github.com/Jeffail/tunny v0.1.4
 	github.com/KDF5000/notion-sdk-go v0.0.0-20220302154627-2eb45474a453
-	github.com/KDF5000/pkg v0.0.0-20220603145259-91e55f8c7865
+	github.com/KDF5000/pkg v0.0.0-20230903102645-f80455d5fce1
 	github.com/c4pt0r/log v0.0.0-20211004143616-aa6380016a47
 	github.com/chromedp/cdproto v0.0.0-20220321060548-7bc2623472b3
 	github.com/chromedp/chromedp v0.8.0
@@ -14,6 +14,8 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/joho/godotenv v1.4.0
 	github.com/json-iterator/go v1.1.10 // indirect
+	github.com/larksuite/oapi-sdk-go v1.1.48 // indirect
+	github.com/larksuite/oapi-sdk-go/v3 v3.0.29 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
