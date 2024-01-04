@@ -1,14 +1,15 @@
 package notion
 
 import (
+	"os"
 	"testing"
 
 	"github.com/KDF5000/nomo/infrastructure/utils"
 )
 
-const (
-	SecretKey  = "xxx"
-	DatabaseID = "xxx"
+var (
+	SecretKey  = os.Getenv("secret_key")
+	DatabaseID = os.Getenv("database_id")
 )
 
 func TestNotionCreatePage(t *testing.T) {
@@ -18,6 +19,7 @@ func TestNotionCreatePage(t *testing.T) {
 		"使用#欢迎 来给内容添加任意标签, 数量不限(注意标签和正文中间应该有个空格哦)",
 		"#科技 只是一条科技#美食 memo",
 		"有些人喜欢在中间加#标签 然后",
+		"这是一个很长很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很很长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长的内容",
 	}
 
 	client := &NotionClient{}

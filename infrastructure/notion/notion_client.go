@@ -87,8 +87,14 @@ func (c *NotionClient) AddNewPage2Database(notionKey, dbId, content string) erro
 
 	page.Properties = make(map[string]core.PropertyValue)
 	page.Properties["Name"] = core.PropertyValue{
-		Type:        core.TYPE_TITLE,
-		TitleObject: &core.RichTextArrary{},
+		Type: core.TYPE_TITLE,
+		TitleObject: &core.RichTextArrary{
+			core.RichTextObject{
+				Type: core.TYPE_TEXT,
+				Text: &core.TextObject{
+					Content: content,
+				},
+			}},
 	}
 
 	var contentBlock core.ParagraphBlock
@@ -101,7 +107,7 @@ func (c *NotionClient) AddNewPage2Database(notionKey, dbId, content string) erro
 			color = "blue"
 		}
 
-		contentBlock.Text = append(contentBlock.Text, core.RichTextObject{
+		obj := core.RichTextObject{
 			Type: core.TYPE_TEXT,
 			Text: &core.TextObject{
 				Content: elem.Text,
@@ -111,7 +117,9 @@ func (c *NotionClient) AddNewPage2Database(notionKey, dbId, content string) erro
 				Code:  elem.IsTag,
 				Color: color,
 			},
-		})
+		}
+
+		contentBlock.Text = append(contentBlock.Text, obj)
 	}
 
 	var textBlock core.Block

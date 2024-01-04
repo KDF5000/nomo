@@ -184,3 +184,16 @@ func TestScanContent(t *testing.T) {
 		t.Logf("content: %s, tags: %+v", tc.Content, tc.Elements)
 	}
 }
+
+func TestTruncate(t *testing.T) {
+	cases := []string{
+		"this is a sentance in english",
+		"你好啊，这是一个中文句子",
+		"你好，this is a 中英混合句子",
+	}
+
+	for _, s := range cases {
+		t.Logf("%s", Truncate(s, 4))
+		t.Logf("%s", Truncate(s, 100))
+	}
+}

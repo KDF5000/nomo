@@ -2,7 +2,6 @@ package lark_doc
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/KDF5000/pkg/larkdoc"
@@ -79,8 +78,6 @@ func (c *LarkDocV2Wrapper) InsertBlock(ctx context.Context, appId, secret string
 	if err != nil {
 		return err
 	}
-
-	log.Printf("index: %d, hasDate: %v", index, hasDate)
 
 	var blocks []*larkdocx.Block
 	if !hasDate {

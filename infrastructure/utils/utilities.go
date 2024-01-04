@@ -90,3 +90,11 @@ func RetriveTags(content string) []string {
 
 	return tags
 }
+
+func Truncate(content string, count int) string {
+	s := []rune(content)
+	if count > len(s) {
+		count = len(s)
+	}
+	return string(s[:count])
+}

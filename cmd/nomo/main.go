@@ -100,7 +100,10 @@ func main() {
 	}
 
 	// register routers
-	router := gin.Default()
+	router := gin.New()
+	router.Use(
+		gin.LoggerWithWriter(gin.DefaultWriter, "/ping"),
+		gin.Recovery())
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
@@ -117,8 +120,14 @@ func main() {
 		c.JSON(http.StatusOK, "ping succ")
 	})
 
-	// get global Monitor object
+	metricRouter := gin.New()
+	metricRouter.Use(
+		gin.LoggerWithWriter(gin.DefaultWriter, "/metrics"),
+		gin.Recovery())
 	m := ginmetrics.GetMonitor()
+	// use metric middleware without expose metric path
+	m.UseWithoutExposingEndpoint(router)
+	// get global Monitor object
 	// +optional set metric path, default /debug/metrics
 	m.SetMetricPath("/metrics")
 	// +optional set slow time, default 5s
@@ -126,9 +135,15 @@ func main() {
 	// +optional set request duration, default {0.1, 0.3, 1.2, 5, 10}
 	// used to p95, p99
 	m.SetDuration([]float64{0.1, 0.3, 1.2, 5, 10})
-
-	// set middleware for gin
-	m.Use(router)
+	// set metric path expose to metric router
+	m.Expose(metricRouter)
+	go func() {
+		port := os.Getenv("METRICS_PORT")
+		if port == "" {
+			port = "8081"
+		}
+		_ = metricRouter.Run(fmt.Sprintf(":%s", port))
+	}()
 
 	bot := larkbot.NewLarkBot(larkbot.BotOption{
 		AppID:     os.Getenv("LARK_APP_ID"),
