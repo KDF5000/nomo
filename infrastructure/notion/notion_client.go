@@ -2,6 +2,7 @@ package notion
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/KDF5000/nomo/infrastructure/utils"
@@ -74,6 +75,29 @@ func (c *NotionClient) AppendBlock(notionKey, pageId, content string) error {
 	return nil
 }
 
+func (c *NotionClient) getTitle(elements []utils.ContentElement) string {
+	var start, end int
+	for i, elem := range elements {
+		if !elem.IsTag && len(strings.TrimSpace(elem.Text)) != 0 {
+			start = i
+			break
+		}
+	}
+
+	for i := len(elements) - 1; i >= 0; i-- {
+		if !elements[i].IsTag && len(strings.TrimSpace(elements[i].Text)) != 0 {
+			end = i
+			break
+		}
+	}
+
+	var title string
+	for i := start; i <= end; i++ {
+		title = fmt.Sprintf("%s%s", title, elements[i].Text)
+	}
+	return title
+}
+
 func (c *NotionClient) AddNewPage2Database(notionKey, dbId, content string) error {
 	client, err := core.NewClient(&core.Option{SecretKey: notionKey})
 	if err != nil {
@@ -86,20 +110,9 @@ func (c *NotionClient) AddNewPage2Database(notionKey, dbId, content string) erro
 	}
 
 	page.Properties = make(map[string]core.PropertyValue)
-	page.Properties["Name"] = core.PropertyValue{
-		Type: core.TYPE_TITLE,
-		TitleObject: &core.RichTextArrary{
-			core.RichTextObject{
-				Type: core.TYPE_TEXT,
-				Text: &core.TextObject{
-					Content: content,
-				},
-			}},
-	}
-
-	var contentBlock core.ParagraphBlock
-	elements := utils.ScanContent(content)
+	elements := utils.ScanContent(strings.TrimSpace(content))
 	var tagObj core.MultiSelectObject
+	var contentBlock core.ParagraphBlock
 	for _, elem := range elements {
 		color := "default"
 		if elem.IsTag {
@@ -120,6 +133,17 @@ func (c *NotionClient) AddNewPage2Database(notionKey, dbId, content string) erro
 		}
 
 		contentBlock.Text = append(contentBlock.Text, obj)
+	}
+
+	page.Properties["Name"] = core.PropertyValue{
+		Type: core.TYPE_TITLE,
+		TitleObject: &core.RichTextArrary{
+			core.RichTextObject{
+				Type: core.TYPE_TEXT,
+				Text: &core.TextObject{
+					Content: c.getTitle(elements),
+				},
+			}},
 	}
 
 	var textBlock core.Block
