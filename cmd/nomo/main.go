@@ -28,7 +28,7 @@ import (
 func initLog() {
 	var logFile string
 	if logFile = os.Getenv("NOMO_LOG_FILE"); logFile == "" {
-		logFile = "/tmp/nomo.log"
+		logFile = "./nomo.log"
 	}
 
 	var tops = []log.TeeOption{
@@ -179,6 +179,10 @@ func main() {
 	v1.GET("/wx", wxMsgHandler.UrlVerification)
 	v1.POST("/wx", wxMsgHandler.HandleMessage)
 
+	// openapi to save content to notion and docx
+	msgHandler := interfaces.NewMessageHandler(application.NewMessageHandleApp())
+	v1.POST("/memo", msgHandler.HandleMessage)
+
 	// start wechatbot in background
 	// go bootWechatbot(repos)
 
@@ -212,6 +216,7 @@ func main() {
 		if useHttps {
 			err = srv.ListenAndServeTLS(os.Getenv("HTTPS_CERT_FILE"), os.Getenv("HTTPS_KEY_FILE"))
 		} else {
+			log.Infof("start http server on %s", addr)
 			err = srv.ListenAndServe()
 		}
 		if err != nil && err != http.ErrServerClosed {

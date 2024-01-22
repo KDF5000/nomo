@@ -76,6 +76,10 @@ func (c *NotionClient) AppendBlock(notionKey, pageId, content string) error {
 }
 
 func (c *NotionClient) getTitle(elements []utils.ContentElement) string {
+	if len(elements) == 0 {
+		return ""
+	}
+
 	var start, end int
 	for i, elem := range elements {
 		if !elem.IsTag && len(strings.TrimSpace(elem.Text)) != 0 {
@@ -95,7 +99,7 @@ func (c *NotionClient) getTitle(elements []utils.ContentElement) string {
 	for i := start; i <= end; i++ {
 		title = fmt.Sprintf("%s%s", title, elements[i].Text)
 	}
-	return title
+	return strings.Replace(title, "\n", " ", -1)
 }
 
 func (c *NotionClient) AddNewPage2Database(notionKey, dbId, content string) error {
